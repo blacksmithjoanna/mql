@@ -39,6 +39,10 @@ participants = [
     ("Smart Sęp (OFICJALNIE)", "https://www.forexfactory.com/smartsep#acct.00-tab.report"),
     ("Marcin Tuszkiewicz (OFICJALNIE)", "https://www.forexfactory.com/ttusiek#acct.69-tab.report"),
     ("Temet Nosce (OFICJALNIE)", "https://www.forexfactory.com/temet.io#acct.31-tab.report"),
+    ("Aurum", "https://www.forexfactory.com/tradingskill#acct.52-tab.report"),
+    ("Q3master", "https://www.forexfactory.com/arturo#acct.68-tab.report"),
+    ("Erik0", "https://www.forexfactory.com/erik0#acct.60-tab.report"),
+    ("acdc-tnt", "https://www.forexfactory.com/pwr-up#acct.09-tab.report"),
 ]
 
 explorer_api = "https://www.forexfactory.com/explorerapi.php?content=tradereport&id="
