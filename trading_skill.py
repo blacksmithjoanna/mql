@@ -80,7 +80,7 @@ for name, url in participants:
         try:
             page = urllib.request.urlopen(req).read().decode("utf-8", "ignore")
         except urllib.error.HTTPError as e:
-            print("{{name:'<a href=\"{}\">{}</a>', roi:0, profit:0, equity:0, net_transfers:0}},".format(url, name))
+            print("{{name:'<a href=\"{}\" target=\"_blank\" rel=\"noopener noreferrer\">{}</a>', roi:0, profit:0, equity:0, net_transfers:0}},".format(url, name))
             continue
         roi = float(extract_roi.search(page).group(1).replace(",", ""))
         funds = extract_funds.findall(page)
