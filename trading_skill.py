@@ -86,8 +86,8 @@ for name, url in participants:
             equity = float(funds[0].replace(",", ""))
             net_transfers = float(funds[1].replace(",", ""))
         profit = equity - net_transfers
-        print("{{name:'<a href=\"{}\">{}</a>', roi:{:.2f}, profit:{:.2f}, equity:{:.2f}, net_transfers:{:.2f}}},".format(url, name, roi, profit, equity, net_transfers))
+        print("{{name:'<a href=\"{}\" target=\"_blank\" rel=\"noopener noreferrer\">{}</a>', roi:{:.2f}, profit:{:.2f}, equity:{:.2f}, net_transfers:{:.2f}}},".format(url, name, roi, profit, equity, net_transfers))
     else:
-        print("{{name:'<a href=\"{}\">{}</a>', roi:0, profit:0, equity:0, net_transfers:0}},".format(url, name))
+        print("{{name:'<a href=\"{}\" target=\"_blank\" rel=\"noopener noreferrer\">{}</a>', roi:0, profit:0, equity:0, net_transfers:0}},".format(url, name))
 
 print(html_bottom)
