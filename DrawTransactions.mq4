@@ -278,6 +278,7 @@ void OnStart() {
         line_number++;
         string line = FileReadString(file_handle);
         StringToLower(line);
+        StringReplace(line, "\t", " ");
         line = StringTrimLeft(line);
         if ((StringFind(line, "sell") == -1) && (StringFind(line, "buy") == -1)) {
             continue;
