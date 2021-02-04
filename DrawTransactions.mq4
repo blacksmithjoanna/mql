@@ -230,9 +230,13 @@ long FindOrOpenChart(string sym) {
 //|                                                                  |
 //+------------------------------------------------------------------+
 void DrawTransaction() {
+    static long cnt = 0;
+    cnt++;
+    
     string object_name = "FFD - " + type +
                          " Open:" + DoubleToString(open_price, 2) +
-                         " Close:" + DoubleToString(close_price, 2);
+                         " Close:" + DoubleToString(close_price, 2) +
+                         " id:" + IntegerToString(cnt);
     string vline_name = object_name + " vline";
 
     long chart_id = FindOrOpenChart(symbol);
@@ -300,11 +304,6 @@ void OnStart() {
         chart_id = ChartNext(chart_id);
     }
 
-    if (chart_id == -1) {
-        chart_id = ChartOpen(symbol, PERIOD_M15);
-        ObjectsDeleteAll(chart_id, prefix);
-        ChartRedraw(chart_id);
-    }
     ResetLastError();
     int file_handle = FileOpen(InpFileName, FILE_READ | FILE_TXT);
     if (file_handle == INVALID_HANDLE) {
