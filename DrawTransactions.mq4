@@ -24,6 +24,12 @@ double close_price;
 datetime open_time;
 datetime close_time;
 
+string symbol_map[][3] = {
+    {"XTIUSD", "CRUDEOIL", "CrudeOIL"},
+    {"DAX30", "DE30", ""},
+    {"XAUUSD", "GOLD", ""},
+    {"XAGUSD", "SILVER", ""},
+};
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -140,7 +146,7 @@ bool ParseOpenTime(int file_handle, int& line_number) {
 
     open_time = StrToTime(year + "." + month + "." + day + " " +
                           IntegerToString(hour) + ":" + result[1]);
-    open_time += InpGMTOffset * 60 * 60;
+    open_time += -InpGMTOffset * 60 * 60;
 
     return false;
 }
@@ -190,9 +196,34 @@ bool ParseCloseTime(int file_handle, int& line_number) {
 
     close_time = StrToTime(year + "." + month + "." + day + " " +
                            IntegerToString(hour) + ":" + result[1]);
-    close_time += InpGMTOffset * 60 * 60;
+    close_time += -InpGMTOffset * 60 * 60;
 
     return false;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+long FindOrOpenChart(string sym) {
+    long chart_id = ChartFirst();
+    while (chart_id != -1) {
+        if (StringCompare(sym, ChartSymbol(chart_id)) == 0) {
+            break;
+        }
+        chart_id = ChartNext(chart_id);
+    }
+
+    if (chart_id == -1) {
+        chart_id = ChartOpen(sym, PERIOD_M15);
+        if (chart_id == 0) {
+            chart_id = -1;
+        } else {
+            ObjectsDeleteAll(chart_id, prefix);
+            ChartRedraw(chart_id);
+        }
+    }
+
+    return chart_id;
 }
 
 //+------------------------------------------------------------------+
@@ -204,20 +235,28 @@ void DrawTransaction() {
                          " Close:" + DoubleToString(close_price, 2);
     string vline_name = object_name + " vline";
 
-    long chart_id = ChartFirst();
-    while (chart_id != -1) {
-        if (StringCompare(symbol, ChartSymbol(chart_id)) == 0) {
-            break;
-        }
-        chart_id = ChartNext(chart_id);
-    }
-
+    long chart_id = FindOrOpenChart(symbol);
     if (chart_id == -1) {
-        chart_id = ChartOpen(symbol, PERIOD_M15);
-        if (chart_id > 0) {
-            ObjectsDeleteAll(chart_id, prefix);
-            ChartRedraw(chart_id);
-        } else {
+        int row_idx = 0;
+        bool found = false;
+        for (; row_idx < ArrayRange(symbol_map, 0) && !found; ++row_idx) {
+            for (int idx = 0; idx < ArrayRange(symbol_map, 1); ++idx) {
+                if (StringCompare(symbol, symbol_map[row_idx][idx]) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found) {
+            row_idx--;
+            for (int idx = 0; idx < ArrayRange(symbol_map, 1); ++idx) {
+                chart_id = FindOrOpenChart(symbol_map[row_idx][idx]);
+                if (chart_id != -1) {
+                    break;
+                }
+            }
+        }
+        if (chart_id == -1) {
             Print("Error, symbol not found: ", symbol);
             return;
         }
@@ -230,6 +269,7 @@ void DrawTransaction() {
     if (InpDrawVerticalLines) {
         ObjectCreate(chart_id, vline_name, OBJ_VLINE, 0, open_time, open_price);
     }
+
     ObjectCreate(chart_id, object_name, OBJ_TREND, 0, open_time, open_price, close_time, close_price);
     ObjectSetInteger(chart_id, object_name, OBJPROP_RAY_RIGHT, false);
     ObjectSetInteger(chart_id, object_name, OBJPROP_WIDTH, 3);
