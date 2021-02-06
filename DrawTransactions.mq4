@@ -8,14 +8,16 @@
 #property link        "https://github.com/blacksmithjoanna/mql"
 #property strict
 #property show_inputs
+#property indicator_chart_window
 
-input int InpGMTOffset = 0; // Hour Offset
 input bool InpDrawVerticalLines = true; // Draw Vertical Red Lines
 input color InpWinColor = clrLightCyan; // Loss Color
 input color InpLossColor = clrLightSalmon; // Win Color
 input string InpFileName = "ForexFactoryTransactions.txt"; // File Name
 
 const string prefix = "FFD - ";
+
+int InpGMTOffset = 0; // Hour Offset
 
 string symbol;
 string type;
@@ -146,8 +148,6 @@ bool ParseOpenTime(int file_handle, int& line_number) {
 
     open_time = StrToTime(year + "." + month + "." + day + " " +
                           IntegerToString(hour) + ":" + result[1]);
-    open_time += -InpGMTOffset * 60 * 60;
-
     return false;
 }
 
@@ -196,10 +196,35 @@ bool ParseCloseTime(int file_handle, int& line_number) {
 
     close_time = StrToTime(year + "." + month + "." + day + " " +
                            IntegerToString(hour) + ":" + result[1]);
-    close_time += -InpGMTOffset * 60 * 60;
-
     return false;
 }
+
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CreateUI(long chart_id) {
+    string name = "ShiftLeft";
+    bool res = ObjectCreate(chart_id, name, OBJ_BUTTON, 0, 0, 0);
+    if (res) {
+        ObjectSetInteger(chart_id, name, OBJPROP_XDISTANCE, 42);
+        ObjectSetInteger(chart_id, name, OBJPROP_YDISTANCE, 42);
+        ObjectSetInteger(chart_id, name, OBJPROP_XSIZE, 42);
+        ObjectSetInteger(chart_id, name, OBJPROP_YSIZE, 42);
+        ObjectSetString(chart_id, name, OBJPROP_TEXT, "<");
+    }
+
+    name = "ShiftRight";
+    res = ObjectCreate(chart_id, name, OBJ_BUTTON, 0, 0, 0);
+    if (res) {
+        ObjectSetInteger(chart_id, name, OBJPROP_XDISTANCE, 84);
+        ObjectSetInteger(chart_id, name, OBJPROP_YDISTANCE, 42);
+        ObjectSetInteger(chart_id, name, OBJPROP_XSIZE, 42);
+        ObjectSetInteger(chart_id, name, OBJPROP_YSIZE, 42);
+        ObjectSetString(chart_id, name, OBJPROP_TEXT, ">");
+    }
+}
+
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -223,6 +248,8 @@ long FindOrOpenChart(string sym) {
         }
     }
 
+    CreateUI(chart_id);
+
     return chart_id;
 }
 
@@ -232,8 +259,8 @@ long FindOrOpenChart(string sym) {
 void DrawTransaction() {
     static long cnt = 0;
     cnt++;
-    
-    string object_name = "FFD - " + type +
+
+    string object_name = prefix + type +
                          " Open:" + DoubleToString(open_price, 2) +
                          " Close:" + DoubleToString(close_price, 2) +
                          " id:" + IntegerToString(cnt);
@@ -292,11 +319,10 @@ void DrawTransaction() {
     }
 }
 
-
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-void OnStart() {
+void OnInit() {
     long chart_id = ChartFirst();
     while (chart_id != -1) {
         ObjectsDeleteAll(chart_id, prefix);
@@ -346,5 +372,80 @@ void OnStart() {
         FileReadString(file_handle);
     }
     FileClose(file_handle);
+    EventSetMillisecondTimer(100);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason) {
+    EventKillTimer();
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnTimer() {
+    bool shift_left = false;
+    bool shift_right = false;
+    long chart_id = ChartFirst();
+    while (chart_id != -1 && !shift_left && !shift_right) {
+        shift_left = ObjectGetInteger(chart_id, "ShiftLeft", OBJPROP_STATE);
+        if (shift_left) {
+            ObjectSetInteger(chart_id, "ShiftLeft", OBJPROP_STATE, false);
+        }
+        shift_right = ObjectGetInteger(chart_id, "ShiftRight", OBJPROP_STATE);
+        if (shift_right) {
+            ObjectSetInteger(chart_id, "ShiftRight", OBJPROP_STATE, false);
+        }
+        chart_id = ChartNext(chart_id);
+    }
+
+    if (shift_left) {
+        InpGMTOffset = -1;
+    } else if (shift_right) {
+        InpGMTOffset = 1;
+    } else {
+        return;
+    }
+
+    chart_id = ChartFirst();
+    while (chart_id != -1) {
+        for(int i = 0; i < ObjectsTotal(chart_id); i++) {
+            string name = ObjectName(chart_id, i);
+            if (StringFind(name, prefix) == 0) {
+                double price = ObjectGetDouble(chart_id, name, OBJPROP_PRICE, 0);
+                datetime open = (datetime)ObjectGetInteger(chart_id, name, OBJPROP_TIME, 0);
+                open += InpGMTOffset * 60 * 60;
+                ObjectMove(chart_id, name, 0, open, price);
+
+                price = ObjectGetDouble(chart_id, name, OBJPROP_PRICE, 1);
+                datetime close = (datetime)ObjectGetInteger(chart_id, name, OBJPROP_TIME, 1);
+                if (close > open) {
+                    close += InpGMTOffset * 60 * 60;
+                    ObjectMove(chart_id, name, 1, close, price);
+                }
+
+            }
+        }
+        ChartRedraw(chart_id);
+        chart_id = ChartNext(chart_id);
+    }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[]) {
+    return rates_total;
 }
 //+------------------------------------------------------------------+
