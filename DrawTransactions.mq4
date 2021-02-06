@@ -103,6 +103,17 @@ string MonthToNumber(string month) {
     return "";
 }
 
+long AmPmTo24(string& result[])
+{
+    long hour = StringToInteger(result[0]);
+    if (StringFind(result[1], "pm") == -1) {
+        hour %= 12;
+    } else {
+        hour = (hour + 12) % 24;
+    }
+    return hour;
+}
+
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -139,13 +150,8 @@ bool ParseOpenTime(int file_handle, int& line_number) {
         Print("Instead, this has been found: ", line);
         return true;
     }
-    long hour = StringToInteger(result[0]);
-    if (StringFind(result[1], "pm") == -1) {
-        hour %= 12;
-    } else {
-        hour = (hour + 12) % 24;
-    }
 
+    long hour = AmPmTo24(result);
     open_time = StrToTime(year + "." + month + "." + day + " " +
                           IntegerToString(hour) + ":" + result[1]);
     return false;
@@ -187,13 +193,8 @@ bool ParseCloseTime(int file_handle, int& line_number) {
         Print("Instead, this has been found: ", line);
         return true;
     }
-    long hour = StringToInteger(result[0]);
-    if (StringFind(result[1], "pm") == -1) {
-        hour %= 12;
-    } else if (hour < 12) {
-        hour += 12;
-    }
 
+    long hour = AmPmTo24(result);
     close_time = StrToTime(year + "." + month + "." + day + " " +
                            IntegerToString(hour) + ":" + result[1]);
     return false;
