@@ -14,10 +14,10 @@ input bool InpDrawVerticalLines = true; // Draw Vertical Red Lines
 input color InpWinColor = clrLightCyan; // Loss Color
 input color InpLossColor = clrLightSalmon; // Win Color
 input string InpFileName = "ForexFactoryTransactions.txt"; // File Name
+input int InpGMTOffset = 0; // Hour Offset
 
 const string prefix = "FFD - ";
 
-int InpGMTOffset = 0; // Hour Offset
 
 string symbol;
 string type;
@@ -154,6 +154,7 @@ bool ParseOpenTime(int file_handle, int& line_number) {
     long hour = AmPmTo24(result);
     open_time = StrToTime(year + "." + month + "." + day + " " +
                           IntegerToString(hour) + ":" + result[1]);
+    open_time += -InpGMTOffset * 60 * 60;
     return false;
 }
 
@@ -197,6 +198,7 @@ bool ParseCloseTime(int file_handle, int& line_number) {
     long hour = AmPmTo24(result);
     close_time = StrToTime(year + "." + month + "." + day + " " +
                            IntegerToString(hour) + ":" + result[1]);
+    close_time += -InpGMTOffset * 60 * 60;
     return false;
 }
 
@@ -402,10 +404,11 @@ void OnTimer() {
         chart_id = ChartNext(chart_id);
     }
 
+    int offset;
     if (shift_left) {
-        InpGMTOffset = -1;
+        offset = -1;
     } else if (shift_right) {
-        InpGMTOffset = 1;
+        offset = 1;
     } else {
         return;
     }
@@ -417,13 +420,13 @@ void OnTimer() {
             if (StringFind(name, prefix) == 0) {
                 double price = ObjectGetDouble(chart_id, name, OBJPROP_PRICE, 0);
                 datetime open = (datetime)ObjectGetInteger(chart_id, name, OBJPROP_TIME, 0);
-                open += InpGMTOffset * 60 * 60;
+                open += offset * 60 * 60;
                 ObjectMove(chart_id, name, 0, open, price);
 
                 price = ObjectGetDouble(chart_id, name, OBJPROP_PRICE, 1);
                 datetime close = (datetime)ObjectGetInteger(chart_id, name, OBJPROP_TIME, 1);
                 if (close > open) {
-                    close += InpGMTOffset * 60 * 60;
+                    close += offset * 60 * 60;
                     ObjectMove(chart_id, name, 1, close, price);
                 }
 
