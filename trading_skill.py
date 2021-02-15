@@ -43,6 +43,23 @@ participants = [
     ("Q3master", "https://www.forexfactory.com/arturo#acct.68-tab.report"),
     ("Erik0", "https://www.forexfactory.com/erik0#acct.60-tab.report"),
     ("acdc-tnt", "https://www.forexfactory.com/pwr-up#acct.09-tab.report"),
+    
+    
+    ("Powoli do przodu", "https://www.forexfactory.com/sizar#acct.38-tab.report"),
+    ("Trader 41", "https://www.forexfactory.com/tradingskill#acct.41-tab.report"),
+    ("Gracz-Fx", "https://www.forexfactory.com/gracz-fx#acct.93-tab.report"),
+    ("ZŁOTNIK87", "https://www.forexfactory.com/zlotnik87#acct.77-tab.report"),
+    ("Sebizbir", "https://www.forexfactory.com/sebizbir#acct.24-tab.report"),
+    ("Dla żony", "https://www.forexfactory.com/matg86#acct.37-tab.report"),
+    ("DargoFx", "https://www.forexfactory.com/degorbi#acct.18-tab.report"),
+    ("Tańczący z jeżami", "https://www.forexfactory.com/pwr-up#acct.09-tab.report"),
+    ("swiezak", "https://www.forexfactory.com/swiezak#acct.71-tab.report"),
+    ("Roberto Fuego", "https://www.forexfactory.com/robertofuego#acct.29-tab.report"),
+    ("BANKRUT999", "https://www.forexfactory.com/mario141194#acct.63-tab.report"),
+    ("Staeb", "https://www.forexfactory.com/staeb#acct.52-tab.report"),
+    ("Trade 2021", "https://www.forexfactory.com/jerryw#acct.38-tab.report"),
+    ("marekuss", "https://www.forexfactory.com/marekuss#acct.23-tab.report"),
+    ("GrekZajadacz", "https://www.forexfactory.com/grekzajadacz#acct.33-tab.report"),
 ]
 
 explorer_api = "https://www.forexfactory.com/explorerapi.php?content=tradereport&id="
