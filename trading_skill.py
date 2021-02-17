@@ -43,8 +43,6 @@ participants = [
     ("Q3master", "https://www.forexfactory.com/arturo#acct.68-tab.report"),
     ("Erik0", "https://www.forexfactory.com/erik0#acct.60-tab.report"),
     ("acdc-tnt", "https://www.forexfactory.com/pwr-up#acct.09-tab.report"),
-    
-    
     ("Powoli do przodu", "https://www.forexfactory.com/sizar#acct.38-tab.report"),
     ("Trader 41", "https://www.forexfactory.com/tradingskill#acct.41-tab.report"),
     ("Gracz-Fx", "https://www.forexfactory.com/gracz-fx#acct.93-tab.report"),
@@ -60,6 +58,12 @@ participants = [
     ("Trade 2021", "https://www.forexfactory.com/jerryw#acct.38-tab.report"),
     ("marekuss", "https://www.forexfactory.com/marekuss#acct.23-tab.report"),
     ("GrekZajadacz", "https://www.forexfactory.com/grekzajadacz#acct.33-tab.report"),
+    ("krakus", "https://www.forexfactory.com/euroforex#acct.34-tab.report"),
+    ("MCH", "https://www.forexfactory.com/mathi#acct.77-tab.report"),
+    ("Czysty wykres", "https://www.forexfactory.com/brtrfx#acct.99-tab.report"),
+    ("Trader 58", "https://www.forexfactory.com/tradingskill#acct.14-tab.report"),
+    ("rafii", "https://www.forexfactory.com/rafal.cze#acct.70-tab.report"),
+    ("Wilk z Bieszczad", "https://www.forexfactory.com/wilkzbiesow#acct.94-tab.report"),
 ]
 
 explorer_api = "https://www.forexfactory.com/explorerapi.php?content=tradereport&id="
