@@ -50,7 +50,7 @@ participants = [
     ("Sebizbir", "https://www.forexfactory.com/sebizbir#acct.24-tab.report"),
     ("Dla żony", "https://www.forexfactory.com/matg86#acct.37-tab.report"),
     ("DargoFx", "https://www.forexfactory.com/degorbi#acct.18-tab.report"),
-    ("Tańczący z jeżami", "https://www.forexfactory.com/pwr-up#acct.09-tab.report"),
+    ("Tańczący z jeżami", "https://www.forexfactory.com/k-roll#acct.30-tab.report"),
     ("swiezak", "https://www.forexfactory.com/swiezak#acct.71-tab.report"),
     ("Roberto Fuego", "https://www.forexfactory.com/robertofuego#acct.29-tab.report"),
     ("BANKRUT999", "https://www.forexfactory.com/mario141194#acct.63-tab.report"),
@@ -64,6 +64,18 @@ participants = [
     ("Trader 58", "https://www.forexfactory.com/tradingskill#acct.14-tab.report"),
     ("rafii", "https://www.forexfactory.com/rafal.cze#acct.70-tab.report"),
     ("Wilk z Bieszczad", "https://www.forexfactory.com/wilkzbiesow#acct.94-tab.report"),
+    ("murcielago77", "https://www.forexfactory.com/baracsedart#acct.70-tab.report"),
+    ("Diament", "https://www.forexfactory.com/diament#acct.24-tab.report"),
+    ("RadekZG", "https://www.forexfactory.com/tradingskill#acct.81-tab.report"),
+    ("Fast TS6", "https://www.forexfactory.com/fastdriver#acct.22-tab.report"),
+    ("Trader 65", "https://www.forexfactory.com/kamasz7#acct.98-tab.report"),
+    ("Trader 66", "https://www.forexfactory.com/tradingskill#acct.16-tab.report"),
+    ("Thomas5648", "https://www.forexfactory.com/thomas5648#acct.47-tab.report"),
+    ("CieńMgły", "https://www.forexfactory.com/ziew#acct.89-tab.report"),
+    ("Trader 69", "https://www.forexfactory.com/sita1#acct.31-tab.report"),
+    ("DonVitoCorleone", "https://www.forexfactory.com/donvitocorle#acct.99-tab.report"),
+    ("Dominus", "https://www.forexfactory.com/dranet#acct.36-tab.report"),
+    ("biotiq", "https://www.forexfactory.com/biotiq#acct.97-tab.report"),
 ]
 
 explorer_api = "https://www.forexfactory.com/explorerapi.php?content=tradereport&id="
